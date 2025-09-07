@@ -46,20 +46,22 @@ jobs:
       # G) Produce an output for next step (modern way)
       - id: compute
         name: Compute value
-        run: echo "value=hello-from-step-one" >> "$GITHUB_OUTPUT"
+        run: |
+         echo "value=hello-from-step-one" >> "$GITHUB_OUTPUT"
 
       # H) Consume the output
       - name: Use previous step output
-        run: echo "Received:${{ steps.compute.outputs.value }}"
+        run: |
+          echo "Received: ${{ steps.compute.outputs.value }}"
 
-      # I) Use a secret (demo). Create ACCESS_TOKEN in:
+
+     # I) Use a secret (safe demo). Create ACCESS_TOKEN in:
       #    Repo Settings → Secrets and variables → Actions → New repository secret
-     
       - name: Use secret (safe demo)
-  if: ${{ secrets.ACCESS_TOKEN != '' }}   # run only if the secret is set
-  env:
-    ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-  run: |
-    echo "Secret length is ${#ACCESS_TOKEN}"
-    # Example usage without printing the token:
-    # curl -H "Authorization: Bearer $ACCESS_TOKEN" https://api.example.com/me
+        if: ${{ secrets.ACCESS_TOKEN != '' }}   # run only if secret is set
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          echo "Secret length is ${#ACCESS_TOKEN}"
+          # Example usage without printing the token:
+          # curl -H "Authorization: Bearer $ACCESS_TOKEN" https://api.example.com/me
