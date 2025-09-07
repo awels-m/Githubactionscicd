@@ -55,13 +55,12 @@ jobs:
           echo "Received: ${{ steps.compute.outputs.value }}"
 
 
-     # I) Use a secret (safe demo). Create ACCESS_TOKEN in:
-      #    Repo Settings → Secrets and variables → Actions → New repository secret
+     # I) Use a secret (safe demo)
+      #    NOTE: 'if:' checks env.ACCESS_TOKEN, not secrets.ACCESS_TOKEN
       - name: Use secret (safe demo)
-        if: ${{ secrets.ACCESS_TOKEN != '' }}   # run only if secret is set
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        if: ${{ env.ACCESS_TOKEN != '' }}   # <-- this is allowed
         run: |
+          # ACCESS_TOKEN is already available from the job-level env above
           echo "Secret length is ${#ACCESS_TOKEN}"
-          # Example usage without printing the token:
+          # Example (don't print the token):
           # curl -H "Authorization: Bearer $ACCESS_TOKEN" https://api.example.com/me
