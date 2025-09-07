@@ -50,7 +50,7 @@ jobs:
 
       # H) Consume the output
       - name: Use previous step output
-        run: echo "Received: ${{ steps.compute.outputs.value }}"
+        run: echo "Received:${{ steps.compute.outputs.value }}"
 
       # I) Use a secret (demo). Create ACCESS_TOKEN in:
       #    Repo Settings → Secrets and variables → Actions → New repository secret
