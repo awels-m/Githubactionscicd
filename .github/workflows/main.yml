@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# Workflow-level environment variables (available to all jobs/steps)
+env:
+  CUSTOM_VAR: "hello-from-workflow"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest   # or macos-latest
+
+    steps:
+      # A) Checkout
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # B) Node setup + npm cache
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      # C) Show the env var (demo)
+      - name: Show env var
+        run: echo "CUSTOM_VAR is $CUSTOM_VAR"
+
+      # D) Install
+      - name: Install dependencies
+        run: npm ci
+
+      # E) Conditional build (only on push to main)
+      - name: Build (only on push to main)
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        run: npm run build
+
+      # F) Tests (always run)
+      - name: Run tests
+        run: npm test
+
+      # G) Produce an output for next step (modern way)
+      - id: compute
+        name: Compute value
+        run: echo "value=hello-from-step-one" >> "$GITHUB_OUTPUT"
+
+      # H) Consume the output
+      - name: Use previous step output
+        run: echo "Received: ${{ steps.compute.outputs.value }}"
+
+      # I) Use a secret (demo). Create ACCESS_TOKEN in:
+      #    Repo Settings → Secrets and variables → Actions → New repository secret
+     
+      - name: Use secret (safe demo)
+  if: ${{ secrets.ACCESS_TOKEN != '' }}   # run only if the secret is set
+  env:
+    ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+  run: |
+    echo "Secret length is ${#ACCESS_TOKEN}"
+    # Example usage without printing the token:
+    # curl -H "Authorization: Bearer $ACCESS_TOKEN" https://api.example.com/me

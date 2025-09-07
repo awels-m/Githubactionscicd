@@ -1,0 +1,27 @@
+{
+  "name": "githubactionscicd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  "start": "node index.js",
+  "build": "echo \"Building (nothing to compile for plain JS)\"",
+  "test": "jest --ci --reporters=default"
+},
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awels-m/Githubactionscicd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/awels-m/Githubactionscicd/issues"
+  },
+  "homepage": "https://github.com/awels-m/Githubactionscicd#readme",
+  "devDependencies": {
+    "jest": "^30.1.3"
+  }
+}
